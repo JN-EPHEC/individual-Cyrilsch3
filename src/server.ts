@@ -4,7 +4,7 @@ import User from './models/User.js'; // Importation du modèle pour qu'il soit s
 
 const app = express();
 const port: number = 3000;
-
+app.use(express.json());
 sequelize.sync({ force: false }) 
     .then(() => {
         console.log('Base de données synchronisée.');
