@@ -5,6 +5,7 @@ import User from './models/User.js'; // Importation du modèle pour qu'il soit s
 const app = express();
 const port: number = 3000;
 app.use(express.json());
+app.use(express.static('public')); // Permet de servir les fichiers du dossier public
 sequelize.sync({ force: false }) 
     .then(() => {
         console.log('Base de données synchronisée.');
