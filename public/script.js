@@ -1,34 +1,47 @@
 const userList = document.getElementById('userList');
 const userForm = document.getElementById('userForm');
 
-// 1. Fonction pour récupérer et afficher les utilisateurs
 async function loadUsers() {
     try {
         const response = await fetch('/api/users');
         const users = await response.json();
 
-        // On vide la liste actuelle
         userList.innerHTML = '';
 
-        // 2. Ajout d'un <li> pour chaque utilisateur
-        users.forEach(user => {
-            const li = document.createElement('li');
-            li.className = 'list-group-item d-flex justify-content-between align-items-center';
-            li.innerHTML = `
-                ${user.prenom} ${user.nom}
-                <span class="badge bg-secondary rounded-pill">ID: ${user.id}</span>
-            `;
-            userList.appendChild(li);
-        });
+       users.forEach(user => {
+    const li = document.createElement('li');
+    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+    li.innerHTML = `
+        <span>${user.prenom} ${user.nom}</span>
+        <button class="btn btn-danger btn-sm" onclick="deleteUser(${user.id})">X</button>`;
+    userList.appendChild(li);       
+});
+        
     } catch (error) {
         console.error("Erreur lors du chargement :", error);
     }
 }
 
-// 3. Intercepter la soumission du formulaire
-userForm.addEventListener('submit', async (e) => {
-    e.preventDefault(); // Empêche le rechargement de la page
+async function deleteUser(id) {
+    //if (!confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) return;
 
+    try {
+        const response = await fetch(`/api/users/${id}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            loadUsers();
+        } else {
+            alert("Erreur lors de la suppression");
+        }
+    } catch (error) {
+        console.error("Erreur réseau :", error);
+    }
+}
+
+userForm.addEventListener('submit', async (e) => {
+    e.preventDefault(); 
     const nom = document.getElementById('nom').value;
     const prenom = document.getElementById('prenom').value;
 
@@ -42,7 +55,6 @@ userForm.addEventListener('submit', async (e) => {
         });
 
         if (response.ok) {
-            // 4. Si l'ajout réussit, on vide le formulaire et on rafraîchit la liste
             userForm.reset();
             loadUsers(); 
         }
@@ -51,5 +63,4 @@ userForm.addEventListener('submit', async (e) => {
     }
 });
 
-// Chargement initial au démarrage
 loadUsers();
