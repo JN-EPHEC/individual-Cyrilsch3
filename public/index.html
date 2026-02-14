@@ -10,31 +10,47 @@
         .container { max-width: 600px; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
     </style>
 </head>
-<body>
+<body class="bg-light">
+    <div class="container py-5">
+        <header class="text-center mb-5">
+            <h1 class="display-4 fw-bold text-primary">Gestionnaire d'Utilisateurs</h1>
+            <p class="lead text-muted">TP Backend - Séance 2</p>
+        </header>
 
-    <div class="container">
-        <h1 class="mb-4">Liste des Utilisateurs</h1>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-4">Nouvel Utilisateur</h5>
+                        <form id="userForm">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Prénom</label>
+                                <input type="text" id="prenom" class="form-control form-control-lg" placeholder="ex: Jean" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">Nom</label>
+                                <input type="text" id="nom" class="form-control form-control-lg" placeholder="ex: Dupont" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm mt-2">
+                                + Ajouter
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
-        <div class="card mb-4">
-            <div class="card-body">
-                <h5 class="card-title">Ajouter un utilisateur</h5>
-                <form id="userForm" class="row g-3">
-                    <div class="col-md-5">
-                        <input type="text" id="nom" class="form-control" placeholder="Nom" required>
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0">Membres enregistrés</h5>
                     </div>
-                    <div class="col-md-5">
-                        <input type="text" id="prenom" class="form-control" placeholder="Prénom" required>
+                    <div class="card-body p-0">
+                        <ul id="userList" class="list-group list-group-flush">
+                            </ul>
                     </div>
-                    <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary w-100">Ajouter</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
-
-        <ul id="userList" class="list-group">
-            <li class="list-group-item text-muted">Chargement des utilisateurs...</li>
-        </ul>
     </div>
     <script src="script.js"></script>
 </body>

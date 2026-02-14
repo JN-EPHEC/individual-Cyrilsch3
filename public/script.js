@@ -10,10 +10,22 @@ async function loadUsers() {
 
        users.forEach(user => {
     const li = document.createElement('li');
-    li.className = 'list-group-item d-flex justify-content-between align-items-center';
-    li.innerHTML = `
-        <span>${user.prenom} ${user.nom}</span>
-        <button class="btn btn-danger btn-sm" onclick="deleteUser(${user.id})">X</button>`;
+    // Dans la boucle forEach de loadUsers() :
+        li.className = 'list-group-item d-flex justify-content-between align-items-center p-3 transition-all';
+        li.innerHTML = `
+            <div class="d-flex align-items-center">
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                    ${user.prenom[0]}${user.nom[0]}
+                </div>
+                <div>
+                    <h6 class="mb-0">${user.prenom} ${user.nom}</h6>
+                    <small class="text-muted">ID: #${user.id}</small>
+                </div>
+            </div>
+            <button class="btn btn-outline-danger btn-sm rounded-pill px-3" onclick="deleteUser(${user.id})">
+                Supprimer
+            </button>
+        `;
     userList.appendChild(li);       
 });
         
