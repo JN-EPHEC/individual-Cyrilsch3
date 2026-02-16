@@ -1,13 +1,14 @@
 import { Router } from 'express';
 import type { Request, Response } from 'express';
 import User from '../models/User.js'; // Vérifiez bien le chemin et l'extension .js
+import { userService } from '../services/userService.js';
 
 const router = Router();
 
 // GET /api/users : Récupérer tous les utilisateurs
 router.get('/users', async (req: Request, res: Response) => {
     try {
-        const users = await User.findAll(); // Méthode Sequelize pour le SELECT *
+        const users = await userService.getActiveUsers();
         res.json(users);
     } catch (error) {
         res.status(500).json({ error: "Erreur lors de la récupération" });
@@ -38,6 +39,25 @@ router.delete('/users/:id', async (req: Request, res: Response) => {
         }
     } catch (error) {
         res.status(500).json({ error: "Erreur lors de la suppression" });
+    }
+});
+
+// PATCH /api/users/:id/archive
+router.patch('/users/:id/archive', async (req, res) => {
+    const user = await userService.archiveUser(req.params.id);
+    if (!user) return res.status(404).json({ error: "Inexistant" });
+    res.json(user);
+});
+
+// PATCH /api/users/:id/tag
+router.patch('/users/:id/tag', async (req, res) => {
+    try {
+        const { tag } = req.body;
+        const user = await userService.updateTag(req.params.id, tag);
+        if (!user) return res.status(404).json({ error: "Inexistant" });
+        res.json(user);
+    } catch (e: any) {
+        res.status(400).json({ error: e.message }); // Erreur 400 si tag invalide
     }
 });
 
