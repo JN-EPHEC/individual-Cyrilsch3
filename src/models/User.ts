@@ -24,6 +24,16 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    tag: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'INVITE' 
+},
+isArchived: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+}
   },
   {
     sequelize,
