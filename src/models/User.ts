@@ -24,10 +24,10 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    tag: {
+tag: {
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'INVITE' 
+    defaultValue: 'INVITÉ'
 },
 isArchived: {
     type: DataTypes.BOOLEAN,

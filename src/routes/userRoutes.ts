@@ -16,12 +16,18 @@ router.get('/users', async (req: Request, res: Response) => {
 });
 
 // POST /api/users : Créer un utilisateur
-router.post('/users', async (req: Request, res: Response) => {
+router.post('/users', async (req, res) => {
     try {
-        const { nom, prenom } = req.body; // Récupère les données du JSON envoyé
-        const newUser = await User.create({ nom, prenom }); // Méthode pour l'INSERT
+        const { nom, prenom, tag } = req.body; // Récupère les 3 champs envoyés par script.js
+        const newUser = await User.create({ 
+            nom, 
+            prenom, 
+            tag: tag.toUpperCase(), // On s'assure que c'est en majuscules
+            isArchived: false 
+        });
         res.status(201).json(newUser);
     } catch (error) {
+        console.error(error); // Regarde ton terminal pour voir l'erreur précise
         res.status(400).json({ error: "Erreur lors de la création" });
     }
 });

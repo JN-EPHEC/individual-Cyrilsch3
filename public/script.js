@@ -13,15 +13,17 @@ async function loadUsers() {
             div.className = 'col-md-10';
             
             div.innerHTML = `
-                <div class="user-card">
-                    <div class="user-name">
-                        ${user.prenom} ${user.nom}
-                    </div>
-                    <div class="delete-link" onclick="deleteUser(${user.id})">
-                        Supprimer —
-                    </div>
-                </div>
-            `;
+               <div class="d-flex align-items-center">
+        <span class="badge border border-dark text-dark me-3" style="font-size: 0.6rem; border-radius: 0;">
+            ${user.tag}
+        </span>
+        <span class="user-name">${user.prenom} ${user.nom}</span>
+    </div>
+    <div>
+        <button class="btn btn-sm btn-outline-dark" onclick="changeTag(${user.id})">TAG</button>
+        <button class="btn btn-sm btn-dark" onclick="archiveUser(${user.id})">ARCHIVER</button>
+    </div>
+`;
             userList.appendChild(div);
         });
     } catch (error) {
@@ -46,24 +48,43 @@ async function deleteUser(id) {
 }
 
 userForm.addEventListener('submit', async (e) => {
-    e.preventDefault(); 
-    const nom = document.getElementById('nom').value;
+    e.preventDefault();
+    
     const prenom = document.getElementById('prenom').value;
+    const nom = document.getElementById('nom').value;
+    const tag = document.getElementById('tagSelect').value; 
 
-    try {
-        const response = await fetch('/api/users', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nom, prenom })
-        });
+    const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nom, prenom, tag })
+    });
 
-        if (response.ok) {
-            userForm.reset();
-            loadUsers(); 
-        }
-    } catch (error) {
-        console.error("Erreur ajout :", error);
+    if (response.ok) {
+        userForm.reset();
+        loadUsers(); 
+    } else {
+        const errorData = await response.json();
+        alert("Erreur : " + errorData.error); 
     }
 });
+
+async function archiveUser(id) {
+    await fetch(`/api/users/${id}/archive`, { method: 'PATCH' });
+    loadUsers();
+}
+
+async function changeTag(id) {
+    const newTag = prompt("Nouveau Tag (MEMBRE, ADMIN, VIP, INVITÉ) :");
+    if (newTag) {
+        const response = await fetch(`/api/users/${id}/tag`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ tag: newTag })
+        });
+        if (!response.ok) alert("Tag invalide !");
+        loadUsers();
+    }
+}
 
 loadUsers();
