@@ -86,5 +86,44 @@ async function changeTag(id) {
         loadUsers();
     }
 }
+async function loadArchivedUsers() {
+    try {
+        const response = await fetch('/api/users/archived');
+        const users = await response.json();
+
+        userList.innerHTML = ''; // Vide la liste actuelle
+
+        users.forEach(user => {
+            const div = document.createElement('div');
+            div.className = 'col-md-10';
+            div.innerHTML = `
+                <div class="user-card" style="opacity: 0.6;">
+                    <div class="user-name">${user.prenom} ${user.nom} (Archivé)</div>
+                    <div class="delete-link" onclick="restoreUser(${user.id})">Restaurer +</div>
+                </div>
+            `;
+            userList.appendChild(div);
+        });
+    } catch (error) {
+        console.error("Erreur archives :", error);
+    }
+}
+async function restoreUser(id) {
+    try {
+        const response = await fetch(`/api/users/${id}/restore`, {
+            method: 'PATCH'
+        });
+
+        if (response.ok) {
+            // On rafraîchit la vue des archives pour confirmer le départ de l'élément
+            loadArchivedUsers(); 
+            console.log("Membre restauré");
+        } else {
+            alert("Erreur lors de la restauration");
+        }
+    } catch (error) {
+        console.error("Erreur réseau :", error);
+    }
+}
 
 loadUsers();

@@ -99,8 +99,8 @@
 
 <div class="container py-5">
     <div class="header-section text-center">
-        <h1 class="display-4 fw-bold">Etudiants</h1>
-        <p class="small text-muted mb-0">Liste des étudiants : </p>
+        <h1 class="display-4 fw-bold">Institution EPHEC</h1>
+        <p class="small text-muted mb-0">Liste des membres : </p>
     </div>
 
     <div class="row justify-content-center mb-5">
@@ -121,6 +121,10 @@
                 </div>
                 <div class="col-md-2">
                     <button type="submit" class="btn btn-dark w-100">Ajouter</button>
+                </div>
+                <div class="d-flex justify-content-center gap-3 mb-4">
+                    <button class="delete-link" onclick="loadUsers()">Membres Actifs</button>
+                    <button class="delete-link" onclick="loadArchivedUsers()">Archives</button>
                 </div>
             </form>
         </div>

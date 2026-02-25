@@ -15,6 +15,18 @@ router.get('/users', async (req: Request, res: Response) => {
     }
 });
 
+// Récupérer uniquement les utilisateurs archivés
+router.get('/users/archived', async (req, res) => {
+    try {
+        const archivedUsers = await User.findAll({ 
+            where: { isArchived: true } 
+        });
+        res.status(200).json(archivedUsers);
+    } catch (error) {
+        res.status(500).json({ error: "Erreur lors de la récupération des archives" });
+    }
+});
+
 // POST /api/users : Créer un utilisateur
 router.post('/users', async (req, res) => {
     try {
@@ -64,6 +76,24 @@ router.patch('/users/:id/tag', async (req, res) => {
         res.json(user);
     } catch (e: any) {
         res.status(400).json({ error: e.message }); // Erreur 400 si tag invalide
+    }
+});
+// Route pour restaurer un utilisateur archivé
+router.patch('/users/:id/restore', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const user = await User.findByPk(id);
+
+        if (!user) {
+            return res.status(404).json({ error: "Utilisateur non trouvé" });
+        }
+
+        // On repasse l'état à false pour qu'il réapparaisse dans loadUsers()
+        await user.update({ isArchived: false });
+        
+        res.status(200).json({ message: "Utilisateur restauré avec succès", user });
+    } catch (error) {
+        res.status(500).json({ error: "Erreur lors de la restauration" });
     }
 });
 
