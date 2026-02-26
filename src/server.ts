@@ -1,5 +1,6 @@
 import express from 'express';
 import sequelize from './config/database.js';
+import cors from 'cors';
 import userRoutes from './routes/userRoutes.js';
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from "./config/swagger.js";
@@ -8,6 +9,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 app.use(requestLogger);
