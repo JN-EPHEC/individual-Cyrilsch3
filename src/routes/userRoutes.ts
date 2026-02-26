@@ -3,7 +3,22 @@ import * as userController from "../controllers/userController.js";
 
 const router = Router();
 
-
+/**
+ * @swagger
+ * /api/users:
+ * get:
+ * summary: Liste des membres actifs
+ * tags: [Users]
+ * responses:
+ * 200:
+ * description: Succès
+ * post:
+ * summary: Ajouter un membre
+ * tags: [Users]
+ * responses:
+ * 201:
+ * description: Créé
+ */
 router.get('/users', userController.getAllUsers);
 router.post('/users', userController.createUser);
 
