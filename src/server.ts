@@ -12,7 +12,7 @@ app.use(express.static('public'));
 
 app.use('/api', userRoutes); 
 
-sequelize.sync({ force: true })
+sequelize.sync({ force: false })
     .then(() => {
         console.log('Base de données synchronisée.');
         app.listen(port, () => {
