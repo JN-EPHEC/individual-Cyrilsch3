@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as userController from "../controllers/userController.js";
+import { checkIdParam } from "../middlewares/checkIdParam.js"; // Importation
 
 const router = Router();
 
@@ -26,12 +27,12 @@ router.post('/users', userController.createUser);
 router.get('/users/archived', userController.getArchivedUsers);
 
 
-router.patch('/users/:id/archive', userController.archiveUser);
+router.patch('/users/:id/archive',checkIdParam, userController.archiveUser);
 
 
-router.patch('/users/:id/restore', userController.restoreUser);
+router.patch('/users/:id/restore',checkIdParam, userController.restoreUser);
 
 
-router.delete('/users/:id', userController.deleteUser);
+router.delete('/users/:id',checkIdParam, userController.deleteUser);
 
 export default router;
