@@ -6,6 +6,8 @@ class User extends Model {
   public id!: number;
   public nom!: string;
   public prenom!: string;
+  public tag!: string;     
+  public isArchived!: boolean; 
 }
 
 
