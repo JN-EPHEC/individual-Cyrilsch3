@@ -3,14 +3,20 @@ import * as userController from "../controllers/userController.js";
 
 const router = Router();
 
-// Routes pour les utilisateurs
-router.get('/users', userController.getAllUsers);
-router.get('/users/archived', userController.getArchivedUsers);
-router.post('/users', userController.createUser);
-router.delete('/users/:id', userController.deleteUser);
 
-// Routes pour les actions spécifiques (PATCH)
+router.get('/users', userController.getAllUsers);
+router.post('/users', userController.createUser);
+
+
+router.get('/users/archived', userController.getArchivedUsers);
+
+
 router.patch('/users/:id/archive', userController.archiveUser);
+
+
 router.patch('/users/:id/restore', userController.restoreUser);
+
+
+router.delete('/users/:id', userController.deleteUser);
 
 export default router;
