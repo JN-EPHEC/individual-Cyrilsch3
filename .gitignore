@@ -1,0 +1,18 @@
+# Dépendances (très lourd, ne jamais versionner)
+server/node_modules/
+
+# Build / Production
+server/dist/
+
+# Variables d'environnement (contient vos mots de passe/clés API)
+server/.env
+
+# Logs et divers
+npm-debug.log*
+server/npm-debug.log*
+.DS_Store
+
+# Frontend
+client/node_modules/
+client/dist/
+client/.env.local
