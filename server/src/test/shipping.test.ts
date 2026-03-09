@@ -1,43 +1,42 @@
 import { calculateShipping } from '../utils/shipping.js';
 
-describe('Shipping Utils - calculateShipping', () => {
-  
-  // --- TESTS DE RÉUSSITE (CAS NOMINAUX) ---
-  
-  it('devrait retourner 10€ pour une distance de 10km et un poids de 5kg en standard', () => {
-    // Arrange & Act
-    const result = calculateShipping(10, 5, 'standard');
-    // Assert
-    expect(result).toBe(10);
-  });
+describe('Shipping Utils - Tests Unitaires', () => {
 
-  it('devrait appliquer une majoration de 50% pour un poids entre 10 et 50kg', () => {
-    // Cas: 100km (base 25) + 20kg (+50%) = 37.5
-    expect(calculateShipping(100, 20, 'standard')).toBe(37.5);
-  });
+  // --- CATALOGUE DES CAS DE SUCCÈS ---
+  // Format : [distance, poids, type, résultat attendu]
+  const successCases: [number, number, 'standard' | 'express', number][] = [
+    [10, 5, 'standard', 10],    // Cas de base
+    [50, 5, 'standard', 10],    // Limite distance basse (incluse)
+    [51, 5, 'standard', 25],    // Passage au palier distance moyen
+    [500, 5, 'standard', 25],   // Limite distance moyenne (incluse)
+    [501, 5, 'standard', 50],   // Passage au palier distance haut
+    [10, 9, 'standard', 10],    // Limite poids (pas de majoration)
+    [10, 10, 'standard', 15],   // Limite poids (majoration 50% de 10)
+    [10, 50, 'standard', 15],   // Limite poids max (incluse)
+    [10, 5, 'express', 20],     // Option Express (10 * 2)
+    [100, 20, 'express', 75],   // Mix: Base 25 + 50% poids (37.5) * 2 express
+  ];
 
-  it('devrait doubler le prix pour une livraison express', () => {
-    // Cas: 10km (base 10) + 5kg (0%) * 2 (express) = 20
-    expect(calculateShipping(10, 5, 'express')).toBe(20);
-  });
+  test.each(successCases)(
+    'Succès: dist %ikm, poids %ikg, type %s -> %i€',
+    (distance, weight, type, expected) => {
+      expect(calculateShipping(distance, weight, type)).toBe(expected);
+    }
+  );
 
-  it('devrait coûter 75€ (50 base + 50% poids) pour plus de 500km et 30kg', () => {
-    expect(calculateShipping(600, 30, 'standard')).toBe(75);
-  });
+  // --- CATALOGUE DES CAS D'ERREURS ---
+  // Format : [distance, poids, type, message d'erreur]
+  const errorCases: [number, number, 'standard' | 'express', string][] = [
+    [-1, 5, 'standard', 'Invalid distance'],  // Distance négative
+    [10, 0, 'standard', 'Invalid weight'],    // Poids nul
+    [10, -5, 'standard', 'Invalid weight'],   // Poids négatif
+    [10, 51, 'standard', 'Invalid weight'],   // Poids > 50kg
+  ];
 
-  // --- TESTS D'ERREURS (EXCEPTIONS) ---
-
-  it('devrait lever une erreur "Invalid distance" pour une distance négative', () => {
-    // Pour tester une exception, on passe la fonction dans l'expect sans l'appeler immédiatement
-    expect(() => calculateShipping(-1, 5, 'standard')).toThrow("Invalid distance");
-  });
-
-  it('devrait lever une erreur "Invalid weight" pour un poids de 0 ou négatif', () => {
-    expect(() => calculateShipping(10, 0, 'standard')).toThrow("Invalid weight");
-    expect(() => calculateShipping(10, -5, 'standard')).toThrow("Invalid weight");
-  });
-
-  it('devrait lever une erreur "Invalid weight" pour un poids supérieur à 50kg', () => {
-    expect(() => calculateShipping(10, 51, 'standard')).toThrow("Invalid weight");
-  });
+  test.each(errorCases)(
+    'Erreur: dist %i, poids %i, type %s -> "%s"',
+    (distance, weight, type, errorMessage) => {
+      expect(() => calculateShipping(distance, weight, type)).toThrow(errorMessage);
+    }
+  );
 });
