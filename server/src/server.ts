@@ -20,6 +20,10 @@ app.use('/api', userRoutes);
 
 app.use(errorHandler);
 
-sequelize.sync({ force: false }).then(() => {
-    app.listen(3000, () => console.log("Serveur prêt sur http://localhost:3000"));
-});
+if (process.env.NODE_ENV !== 'test') {
+    sequelize.sync({ force: false }).then(() => {
+        app.listen(3000, () => console.log("Serveur prêt sur http://localhost:3000"));
+    });
+}
+
+export default app;
