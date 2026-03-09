@@ -16,3 +16,4 @@ server/npm-debug.log*
 client/node_modules/
 client/dist/
 client/.env.local
+node_modules
